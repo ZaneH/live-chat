@@ -514,6 +514,7 @@ local.properties
 *.so.*
 *.dll
 *.dylib
+.qt/
 
 # Qt-es
 object_script.*.Release
