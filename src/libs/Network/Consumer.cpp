@@ -3,29 +3,24 @@
 #include <QDebug>
 #include <QString>
 
-using namespace std;
+Consumer::Consumer(zmqpp::context *ctx, string topic)
+    : m_context(ctx), m_topic(topic), m_socket(*ctx, zmqpp::socket_type::sub) {}
 
 void Consumer::run() {
-  qInfo() << "Constructed";
-
-  const string endpoint = "tcp://*:4242";
-
-  zmqpp::context context;
-
-  zmqpp::socket_type type = zmqpp::socket_type::pull;
-  zmqpp::socket socket(context, type);
-
-  socket.bind(endpoint);
+  m_socket.connect("tcp://0.0.0.0:4242");
+  qInfo() << "Listening to topic:" << m_topic;
+  m_socket.subscribe(m_topic);
 
   do {
     zmqpp::message message;
-    socket.receive(message);
-    string text;
-    message >> text;
+    m_socket.receive(message);
+    string room;
+    string body;
+    message >> room;
+    message >> body;
 
-    qInfo() << "Received: " << text;
-
-    Message *m = new Message(text, text);
+    Message *m = new Message(room, body);
+    qInfo() << room << body;
     emit messageRecieved(m);
   } while (1);
 }

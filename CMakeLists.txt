@@ -22,6 +22,8 @@ qt_add_executable(chat_client
     src/gui/ChatWindow.cpp
     src/libs/Network/Consumer.cpp
     src/libs/Network/Consumer.h
+    src/libs/Network/Producer.cpp
+    src/libs/Network/Producer.h
 )
 
 target_link_libraries(chat_client PRIVATE Qt6::Widgets)

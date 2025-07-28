@@ -1,5 +1,6 @@
 #include "ChatWindow.h"
 #include "../libs/Network/Consumer.h"
+#include "../libs/Network/Producer.h"
 #include <QDebug>
 #include <QFontMetrics>
 #include <QHBoxLayout>
@@ -34,17 +35,37 @@ ChatWindow::ChatWindow(QWidget *parent) : QWidget(parent) {
   mainLayout->addLayout(bottomLayout);
   setLayout(mainLayout);
 
+  addMessageListener("room");
+  addPublisher("room");
+}
+
+void ChatWindow::addPublisher(std::string topic) {
+  // Add chat publisher
+  producer = new Producer(&context, topic);
+  producer->moveToThread(&producerThread);
+  connect(&producerThread, &QThread::started, producer, &Producer::run);
+
+  producerThread.start();
+}
+
+void ChatWindow::addMessageListener(std::string topic) {
   // Add chat consumer
-  auto consumer = new Consumer();
+  consumer = new Consumer(&context, topic);
   consumer->moveToThread(&consumerThread);
-  QObject::connect(&consumerThread, &QThread::started, consumer,
-                   &Consumer::run);
-  QObject::connect(consumer, &Consumer::messageRecieved, this,
-                   &ChatWindow::addMessage);
+  connect(&consumerThread, &QThread::started, consumer, &Consumer::run);
+  connect(consumer, &Consumer::messageRecieved, this, &ChatWindow::addMessage);
+
   consumerThread.start();
 }
 
-void ChatWindow::sendMessage() { qInfo() << "Hi"; }
+void ChatWindow::sendMessage() {
+  QString body = messageBox->toPlainText();
+  qInfo() << body;
+
+  producer->sendMessage(body);
+
+  messageBox->setPlainText("");
+}
 
 void ChatWindow::adjustTextEditHeight() {
   int maxHeight = fontMetrics().lineSpacing() * 5;
@@ -56,7 +77,7 @@ void ChatWindow::adjustTextEditHeight() {
 void ChatWindow::addMessage(Message *message) {
   QString newText = chatLog->toPlainText();
   QString newLine = QString::fromStdString(
-      std::format("{}: {}\n", message->getUsername(), message->getUsername()));
+      std::format("{}: {}\n", message->getDisplayName(), message->getBody()));
   newText.append(newLine);
   chatLog->setText(newText);
 }

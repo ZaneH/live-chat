@@ -5,10 +5,10 @@
 class Message {
 public:
   Message(std::string username, std::string text);
-  std::string getUsername();
-  std::string getText();
+  std::string getDisplayName();
+  std::string getBody();
 
 private:
-  std::string m_username;
+  std::string m_displayName;
   std::string m_text;
 };

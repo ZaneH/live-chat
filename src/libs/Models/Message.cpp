@@ -1,11 +1,11 @@
 #include "Message.h"
 #include <string>
 
-Message::Message(std::string username, std::string text) {
-  m_username = username;
+Message::Message(std::string displayName, std::string text) {
+  m_displayName = displayName;
   m_text = text;
 }
 
-std::string Message::getText() { return m_text; }
+std::string Message::getBody() { return m_text; }
 
-std::string Message::getUsername() { return m_username; }
+std::string Message::getDisplayName() { return m_displayName; }

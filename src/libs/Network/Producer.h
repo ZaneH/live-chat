@@ -1,27 +1,24 @@
 #pragma once
-#include <QDebug>
 #include <QObject>
-#include <QThread>
+#include <QString>
 #include <zmqpp/zmqpp.hpp>
 
 using namespace std;
 
 class Message;
 
-class Consumer : public QObject {
+class Producer : public QObject {
   Q_OBJECT
 
 public:
-  Consumer(zmqpp::context *ctx, string topic);
+  Producer(zmqpp::context *ctx, string topic);
 
 private:
   string m_topic;
   zmqpp::socket m_socket;
   zmqpp::context *m_context;
 
-signals:
-  void messageRecieved(Message *message);
-
 public slots:
   void run();
+  void sendMessage(QString body);
 };
