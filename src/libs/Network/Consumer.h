@@ -3,14 +3,15 @@
 #include <QObject>
 #include <QThread>
 #include <zmqpp/zmqpp.hpp>
-#include "../libs/Models/Message.h"
+
+class Message;
 
 class Consumer : public QObject {
-    Q_OBJECT
+  Q_OBJECT
 
 signals:
-    void messageRecieved(Message *message);
+  void messageRecieved(Message *message);
 
 public slots:
-    void run();
+  void run();
 };

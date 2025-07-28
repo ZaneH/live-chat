@@ -1,24 +1,25 @@
 #pragma once
-#include <QWidget>
+#include <QPushButton>
+#include <QTextEdit>
 #include <QThread>
-#include "../libs/Models/Message.h"
+#include <QWidget>
 
-class QTextEdit;
-class QPushButton;
+class Message;
 
 class ChatWindow : public QWidget {
-    Q_OBJECT
-    QThread consumerThread;
+  Q_OBJECT
+  QThread consumerThread;
+
 public:
-    ChatWindow(QWidget *parent = nullptr);
+  ChatWindow(QWidget *parent = nullptr);
 
 private slots:
-    void sendMessage();
-    void adjustTextEditHeight();
-    void addMessage(Message *message);
+  void sendMessage();
+  void adjustTextEditHeight();
+  void addMessage(Message *message);
 
 private:
-    QTextEdit *chatLog;
-    QTextEdit *messageBox;
-    QPushButton *sendButton;
+  QTextEdit *chatLog;
+  QTextEdit *messageBox;
+  QPushButton *sendButton;
 };

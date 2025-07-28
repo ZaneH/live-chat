@@ -263,6 +263,8 @@ tags
 auto-save-list
 tramp
 .\#*
+.ccls
+.ccls-cache/
 
 # Org-mode
 .org-id-locations

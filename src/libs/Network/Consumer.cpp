@@ -1,4 +1,5 @@
 #include "Consumer.h"
+#include "../libs/Models/Message.h"
 #include <QDebug>
 #include <QString>
 
