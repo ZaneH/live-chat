@@ -1,6 +1,7 @@
 #pragma once
 #include <QWidget>
 #include <QThread>
+#include "../libs/Models/Message.h"
 
 class QTextEdit;
 class QPushButton;
@@ -14,6 +15,7 @@ public:
 private slots:
     void sendMessage();
     void adjustTextEditHeight();
+    void addMessage(Message *message);
 
 private:
     QTextEdit *chatLog;

@@ -1,5 +1,6 @@
 #include "Consumer.h"
 #include <QDebug>
+#include <QString>
 
 using namespace std;
 
@@ -15,10 +16,15 @@ void Consumer::run() {
 
   socket.bind(endpoint);
 
-  zmqpp::message message;
-  socket.receive(message);
-  string text;
-  message >> text;
+  do {
+    zmqpp::message message;
+    socket.receive(message);
+    string text;
+    message >> text;
 
-  qInfo() << "Received: " << text;
+    qInfo() << "Received: " << text;
+
+    Message *m = new Message(text, text);
+    emit messageRecieved(m);
+  } while (1);
 }

@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QFontMetrics>
 #include <QDebug>
+#include <string>
 #include "../libs/Network/Consumer.h"
 
 ChatWindow::ChatWindow(QWidget *parent) : QWidget(parent) {
@@ -37,6 +38,7 @@ ChatWindow::ChatWindow(QWidget *parent) : QWidget(parent) {
     auto consumer = new Consumer();
     consumer->moveToThread(&consumerThread);
     QObject::connect(&consumerThread, &QThread::started, consumer, &Consumer::run);
+    QObject::connect(consumer, &Consumer::messageRecieved, this, &ChatWindow::addMessage);
     consumerThread.start();
 }
 
@@ -49,4 +51,11 @@ void ChatWindow::adjustTextEditHeight() {
     int docHeight = messageBox->document()->size().height();
     int newHeight = qMin(maxHeight, int(docHeight) + 10);
     messageBox->setFixedHeight(newHeight);
+}
+
+void ChatWindow::addMessage(Message *message) {
+    QString newText = chatLog->toPlainText();
+    QString newLine = QString::fromStdString(std::format("{}: {}\n", message->getUsername(), message->getUsername()));
+    newText.append(newLine);
+    chatLog->setText(newText);
 }
