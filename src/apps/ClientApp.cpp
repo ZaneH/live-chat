@@ -1,12 +1,9 @@
-#include <zmqpp/zmqpp.hpp>
-#include <string>
-#include <iostream>
-#include <QApplication>
-#include <QPushButton>
 #include "../gui/ChatWindow.h"
+#include <QApplication>
+#include <zmqpp/zmqpp.hpp>
 
 int main(int argc, char *argv[]) {
-  QApplication app (argc, argv);
+  QApplication app(argc, argv);
 
   ChatWindow window;
   window.resize(375, 300);

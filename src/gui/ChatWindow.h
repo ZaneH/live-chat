@@ -26,9 +26,9 @@ private:
   QPushButton *sendButton;
 
   zmqpp::context context;
-  Consumer *consumer;
   Producer *producer;
+  Consumer *consumer;
 
-  void addMessageListener(std::string topic);
-  void addPublisher(std::string topic);
+  void createClient(std::string topic);
+  void createConsumer(std::string topic);
 };

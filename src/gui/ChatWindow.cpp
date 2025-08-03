@@ -35,12 +35,11 @@ ChatWindow::ChatWindow(QWidget *parent) : QWidget(parent) {
   mainLayout->addLayout(bottomLayout);
   setLayout(mainLayout);
 
-  addMessageListener("room");
-  addPublisher("room");
+  createClient("room");
+  createConsumer("room");
 }
 
-void ChatWindow::addPublisher(std::string topic) {
-  // Add chat publisher
+void ChatWindow::createClient(std::string topic) {
   producer = new Producer(&context, topic);
   producer->moveToThread(&producerThread);
   connect(&producerThread, &QThread::started, producer, &Producer::run);
@@ -48,8 +47,7 @@ void ChatWindow::addPublisher(std::string topic) {
   producerThread.start();
 }
 
-void ChatWindow::addMessageListener(std::string topic) {
-  // Add chat consumer
+void ChatWindow::createConsumer(std::string topic) {
   consumer = new Consumer(&context, topic);
   consumer->moveToThread(&consumerThread);
   connect(&consumerThread, &QThread::started, consumer, &Consumer::run);
@@ -62,7 +60,9 @@ void ChatWindow::sendMessage() {
   QString body = messageBox->toPlainText();
   qInfo() << body;
 
-  producer->sendMessage(body);
+  Message msg("User1", "room", body.toStdString());
+
+  producer->sendMessage(&msg);
 
   messageBox->setPlainText("");
 }
@@ -79,5 +79,6 @@ void ChatWindow::addMessage(Message *message) {
   QString newLine = QString::fromStdString(
       std::format("{}: {}\n", message->getDisplayName(), message->getBody()));
   newText.append(newLine);
+  qInfo() << "Appending to chat log";
   chatLog->setText(newText);
 }

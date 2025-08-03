@@ -4,18 +4,16 @@
 #include <QThread>
 #include <zmqpp/zmqpp.hpp>
 
-using namespace std;
-
 class Message;
 
 class Consumer : public QObject {
   Q_OBJECT
 
 public:
-  Consumer(zmqpp::context *ctx, string topic);
+  Consumer(zmqpp::context *ctx, std::string topic);
 
 private:
-  string m_topic;
+  std::string m_topic;
   zmqpp::socket m_socket;
   zmqpp::context *m_context;
 

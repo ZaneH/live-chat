@@ -26,6 +26,10 @@ qt_add_executable(chat_client
     src/libs/Network/Producer.h
 )
 
+add_executable(chat_server
+    src/apps/ChatServer.cpp
+)
+
 target_link_libraries(chat_client PRIVATE Qt6::Widgets)
 target_link_libraries(chat_client PRIVATE Qt6::Core)
 target_link_libraries(chat_client PRIVATE Qt6::Gui)
@@ -38,6 +42,20 @@ target_include_directories(chat_client PRIVATE
 
 target_link_libraries(chat_client PRIVATE
     /usr/local/lib/libzmqpp.so
-    /usr/lib64/libzmq.so
+    /usr/local/lib/libzmq.so
     /usr/lib64/libGL.so
 )
+
+target_include_directories(chat_server PRIVATE
+    src/libs
+    /usr/local/include
+    /usr/include/boost
+)
+
+target_link_libraries(chat_server PRIVATE
+    /usr/local/lib/libzmqpp.so
+    /usr/local/lib/libzmq.so
+)
+
+target_compile_definitions(chat_client PUBLIC ZMQ_BUILD_DRAFT_API)
+target_compile_definitions(chat_server PUBLIC ZMQ_BUILD_DRAFT_API)

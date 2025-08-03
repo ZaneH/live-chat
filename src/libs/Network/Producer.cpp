@@ -1,13 +1,14 @@
 #include "Producer.h"
 #include <QDebug>
 
-Producer::Producer(zmqpp::context *ctx, string topic)
-    : m_context(ctx), m_topic(topic), m_socket(*ctx, zmqpp::socket_type::pub) {}
+Producer::Producer(zmqpp::context *ctx, std::string topic)
+    : m_context(ctx), m_topic(topic),
+      m_socket(*ctx, zmqpp::socket_type::dealer) {}
 
-void Producer::run() { m_socket.bind("tcp://*:4242"); }
+void Producer::run() { m_socket.connect("tcp://127.0.0.1:4242"); }
 
-void Producer::sendMessage(QString body) {
-    zmqpp::message message(m_topic, body.toStdString());
-    qInfo() << "Sending message" << m_topic << body;
-    m_socket.send(message);
+void Producer::sendMessage(Message *message) {
+  zmqpp::message msg("MESSAGE", message->getDisplayName(), message->getRoom(),
+                     message->getBody());
+  m_socket.send(msg);
 }

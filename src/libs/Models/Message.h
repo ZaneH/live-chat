@@ -4,11 +4,13 @@
 
 class Message {
 public:
-  Message(std::string username, std::string text);
+  Message(std::string username, std::string room, std::string body);
   std::string getDisplayName();
+  std::string getRoom();
   std::string getBody();
 
 private:
   std::string m_displayName;
-  std::string m_text;
+  std::string m_room;
+  std::string m_body;
 };
