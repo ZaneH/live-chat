@@ -1,6 +1,11 @@
 <h1 align="center">Live Chat</h1>
 
-A simple chat application to practice ZMQ and Qt.
+<div align="center">
+  A simple chat application to practice ZMQ and Qt.
+  <br />
+  <br />
+  <img width="650" height="382" alt="Screenshot_20250803_173823" src="https://github.com/user-attachments/assets/6c4d10e5-fc7d-47c3-a7d4-b86195e28681" />
+</div>
 
 ## Build and Run
 
