@@ -10,7 +10,8 @@
 #include <QThread>
 #include <QVBoxLayout>
 
-ChatWindow::ChatWindow(QWidget *parent) : QWidget(parent) {
+ChatWindow::ChatWindow(QWidget *parent)
+    : QWidget(parent), displayName("Anonymous") {
   auto *mainLayout = new QVBoxLayout(this);
 
   chatLog = new QTextEdit(this);
@@ -19,12 +20,13 @@ ChatWindow::ChatWindow(QWidget *parent) : QWidget(parent) {
 
   auto *bottomLayout = new QHBoxLayout();
 
-  messageBox = new QTextEdit(this);
+  messageBox = new MyTextEdit(this);
   messageBox->setFixedHeight(messageBox->fontMetrics().lineSpacing() * 2);
   messageBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
   messageBox->setAcceptRichText(false);
   connect(messageBox, &QTextEdit::textChanged, this,
           &ChatWindow::adjustTextEditHeight);
+  connect(messageBox, &MyTextEdit::submitted, this, &ChatWindow::sendMessage);
 
   sendButton = new QPushButton("Send", this);
   connect(sendButton, &QPushButton::clicked, this, &ChatWindow::sendMessage);
@@ -58,9 +60,18 @@ void ChatWindow::createConsumer(std::string topic) {
 
 void ChatWindow::sendMessage() {
   QString body = messageBox->toPlainText();
-  qInfo() << body;
 
-  Message msg("User1", "room", body.toStdString());
+  Message msg(displayName, "room", body.toStdString());
+
+  std::string bs = body.toStdString();
+  int pos = bs.find("/nick ");
+  if (pos == 0) {
+    std::string nick = bs.substr(strlen("/nick "));
+    displayName = nick;
+    messageBox->setPlainText("");
+
+    return;
+  }
 
   producer->sendMessage(&msg);
 
@@ -79,6 +90,5 @@ void ChatWindow::addMessage(Message *message) {
   QString newLine = QString::fromStdString(
       std::format("{}: {}\n", message->getDisplayName(), message->getBody()));
   newText.append(newLine);
-  qInfo() << "Appending to chat log";
   chatLog->setText(newText);
 }

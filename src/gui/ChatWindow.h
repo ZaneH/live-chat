@@ -2,6 +2,7 @@
 #include "../libs/Models/Message.h"
 #include "../libs/Network/Consumer.h"
 #include "../libs/Network/Producer.h"
+#include "MyTextEdit.h"
 #include <QPushButton>
 #include <QTextEdit>
 #include <QThread>
@@ -22,12 +23,13 @@ private slots:
 
 private:
   QTextEdit *chatLog;
-  QTextEdit *messageBox;
+  MyTextEdit *messageBox;
   QPushButton *sendButton;
 
   zmqpp::context context;
   Producer *producer;
   Consumer *consumer;
+  std::string displayName;
 
   void createClient(std::string topic);
   void createConsumer(std::string topic);

@@ -20,6 +20,7 @@ qt_add_executable(chat_client
     src/libs/Models/Message.cpp
     src/gui/ChatWindow.h
     src/gui/ChatWindow.cpp
+    src/gui/MyTextEdit.cpp
     src/libs/Network/Consumer.cpp
     src/libs/Network/Consumer.h
     src/libs/Network/Producer.cpp
@@ -49,7 +50,6 @@ target_link_libraries(chat_client PRIVATE
 target_include_directories(chat_server PRIVATE
     src/libs
     /usr/local/include
-    /usr/include/boost
 )
 
 target_link_libraries(chat_server PRIVATE

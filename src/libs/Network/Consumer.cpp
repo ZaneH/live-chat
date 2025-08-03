@@ -10,6 +10,7 @@ Consumer::Consumer(zmqpp::context *ctx, std::string topic)
 void Consumer::run() {
   m_socket.connect("tcp://0.0.0.0:4242");
 
+  // Inform router of dealer's presense
   zmqpp::message hello("HELLO");
   m_socket.send(hello);
 
