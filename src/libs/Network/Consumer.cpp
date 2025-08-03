@@ -17,10 +17,12 @@ void Consumer::run() {
   do {
     zmqpp::message message;
     m_socket.receive(message);
+
     std::string displayName, room, body;
     message >> displayName >> room >> body;
 
-    Message msg(displayName, room, body);
-    emit messageRecieved(&msg);
+    Message *rxMsg = new Message(displayName, room, body, this);
+    emit messageRecieved(rxMsg);
+    rxMsg->deleteLater();
   } while (1);
 }

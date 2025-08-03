@@ -1,10 +1,14 @@
 #pragma once
+#include <QObject>
 #include <QString>
 #include <string>
 
-class Message {
+class Message : public QObject {
+  Q_OBJECT
+
 public:
-  Message(std::string username, std::string room, std::string body);
+  Message(std::string displayName, std::string room, std::string body,
+          QObject *parent = nullptr);
   std::string getDisplayName();
   std::string getRoom();
   std::string getBody();

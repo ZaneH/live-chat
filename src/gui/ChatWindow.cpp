@@ -61,8 +61,6 @@ void ChatWindow::createConsumer(std::string topic) {
 void ChatWindow::sendMessage() {
   QString body = messageBox->toPlainText();
 
-  Message msg(displayName, "room", body.toStdString());
-
   std::string bs = body.toStdString();
   int pos = bs.find("/nick ");
   if (pos == 0) {
@@ -73,7 +71,9 @@ void ChatWindow::sendMessage() {
     return;
   }
 
-  producer->sendMessage(&msg);
+  Message *txMsg = new Message(displayName, "room", body.toStdString(), this);
+  producer->sendMessage(txMsg);
+  txMsg->deleteLater();
 
   messageBox->setPlainText("");
 }
@@ -86,9 +86,7 @@ void ChatWindow::adjustTextEditHeight() {
 }
 
 void ChatWindow::addMessage(Message *message) {
-  QString newText = chatLog->toPlainText();
-  QString newLine = QString::fromStdString(
-      std::format("{}: {}\n", message->getDisplayName(), message->getBody()));
-  newText.append(newLine);
-  chatLog->setText(newText);
+  QString newLine =
+      QString("%1: %2\n").arg(message->getDisplayName(), message->getBody());
+  chatLog->append(newLine);
 }
