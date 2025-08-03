@@ -14,9 +14,8 @@ find_package(Qt6 COMPONENTS Widgets REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
 
-qt_add_executable(chat_client
+qt_add_executable(live_chat_client
     src/apps/ClientApp.cpp
-    src/libs/Models/User.cpp
     src/libs/Models/Message.cpp
     src/gui/ChatWindow.h
     src/gui/ChatWindow.cpp
@@ -27,35 +26,35 @@ qt_add_executable(chat_client
     src/libs/Network/Producer.h
 )
 
-add_executable(chat_server
+add_executable(live_chat_server
     src/apps/ChatServer.cpp
 )
 
-target_link_libraries(chat_client PRIVATE Qt6::Widgets)
-target_link_libraries(chat_client PRIVATE Qt6::Core)
-target_link_libraries(chat_client PRIVATE Qt6::Gui)
+target_link_libraries(live_chat_client PRIVATE Qt6::Widgets)
+target_link_libraries(live_chat_client PRIVATE Qt6::Core)
+target_link_libraries(live_chat_client PRIVATE Qt6::Gui)
 
-target_include_directories(chat_client PRIVATE
+target_include_directories(live_chat_client PRIVATE
     src/libs
     /usr/local/include
     /usr/include/GL
 )
 
-target_link_libraries(chat_client PRIVATE
+target_link_libraries(live_chat_client PRIVATE
     /usr/local/lib/libzmqpp.so
     /usr/local/lib/libzmq.so
     /usr/lib64/libGL.so
 )
 
-target_include_directories(chat_server PRIVATE
+target_include_directories(live_chat_server PRIVATE
     src/libs
     /usr/local/include
 )
 
-target_link_libraries(chat_server PRIVATE
+target_link_libraries(live_chat_server PRIVATE
     /usr/local/lib/libzmqpp.so
     /usr/local/lib/libzmq.so
 )
 
-target_compile_definitions(chat_client PUBLIC ZMQ_BUILD_DRAFT_API)
-target_compile_definitions(chat_server PUBLIC ZMQ_BUILD_DRAFT_API)
+target_compile_definitions(live_chat_client PUBLIC ZMQ_BUILD_DRAFT_API)
+target_compile_definitions(live_chat_server PUBLIC ZMQ_BUILD_DRAFT_API)
